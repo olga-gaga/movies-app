@@ -14,13 +14,17 @@ export default {
     messagePool: "showNotification"
   },
   methods: {
-    showNotification({ variant, message, title }) {
+    showNotification({
+      variant = "",
+      message = "No message",
+      title = "No title"
+    } = {}) {
       this.$bvToast.toast(message, {
         title,
         variant,
         solid: true
-      })
+      });
     }
   }
-}
+};
 </script>

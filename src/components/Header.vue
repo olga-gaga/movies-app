@@ -2,7 +2,7 @@
   <header class="header">
     <BNavbar class="navbar" type="dark" variant="dark">
       <BContainer>
-        <BNavbarBrand href="#">MovieDB</BNavbarBrand>
+        <BNavbarBrand href="/">MovieDB</BNavbarBrand>
         <BNavForm>
           <BFormInput
             v-model="searchValue"
@@ -10,9 +10,9 @@
             class="mr-sm-2 search-input"
             placeholder="Search"
           ></BFormInput>
-      </BNavForm>
-    </BContainer>
-  </BNavbar>
+        </BNavForm>
+      </BContainer>
+    </BNavbar>
   </header>
 </template>
 
@@ -28,20 +28,22 @@ export default {
     searchValue: "onSearchValueChange"
   },
   methods: {
-    ...mapActions("movies", ["searchMovies", "fetchMovies", "toggleSearchState"]),
-    onSearchValueChange(value){
-      console.log(value);
-      if(value) {
+    ...mapActions("movies", [
+      "searchMovies",
+      "fetchMovies",
+      "toggleSearchState"
+    ]),
+    onSearchValueChange(value) {
+      if (value) {
         this.searchMovies(value);
         this.toggleSearchState(true);
       } else {
         this.fetchMovies();
         this.toggleSearchState(false);
       }
-      
     }
   }
-}
+};
 </script>
 
 <style scoped>

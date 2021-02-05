@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style scoped>
-.movies-pagination{
+.movies-pagination {
   margin-top: auto;
 }
 

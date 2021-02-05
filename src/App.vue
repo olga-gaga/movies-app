@@ -4,8 +4,13 @@
     <Notification />
     <PosterBg :poster="posterBg" />
     <Header />
-    <MoviesList :list="moviesList" @changePoster="onChangePoster" />
+    <MoviesList
+      :list="moviesList"
+      :isSearch="isSearch"
+      @changePoster="onChangePoster"
+    />
     <MoviesPagination
+      v-if="!isSearch"
       :current-page="currentPage"
       :per-page="moviesPerPage"
       :total="moviesLength"
@@ -40,12 +45,13 @@ export default {
       "moviesList",
       "currentPage",
       "moviesPerPage",
-      "moviesLength"
+      "moviesLength",
+      "isSearch"
     ])
   },
   watch: {
-    '$route.query': {
-      handler: 'onPageQueryChange',
+    "$route.query": {
+      handler: "onPageQueryChange",
       immediate: true,
       deep: true
     }
@@ -56,7 +62,7 @@ export default {
       this.posterBg = poster;
     },
     onPageChanged(page) {
-      this.$router.push({ query: { page }});
+      this.$router.push({ query: { page } });
       this.changeCurrentPage(page);
     },
     onPageQueryChange({ page = 1 }) {
