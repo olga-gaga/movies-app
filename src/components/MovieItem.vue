@@ -8,12 +8,14 @@
       </div>
       <div class="movie-item-controls row no-gutters">
         <div class="col pr-1">
-          <BButton 
+          <BButton
             size="md"
             block
             variant="outline-light"
             @click="showInfoModalEvent"
-          >Info</BButton>
+          >
+            Info
+          </BButton>
         </div>
         <div class="col pl-1">
           <BButton
@@ -21,7 +23,9 @@
             block
             variant="outline-light"
             @click="emitRemoveEvent"
-          >Remove</BButton>
+          >
+            Remove
+          </BButton>
         </div>
       </div>
     </div>
@@ -40,11 +44,10 @@ export default {
   },
   computed: {
     posterBg() {
-      console.log(this.movie.Poster);
       return {
-        "background-image": `url(${this.movie.Poster !== "N/A" ? this.movie.Poster : "https://upload.wikimedia.org/wikipedia/commons/c/c2/No_image_poster.png"})`
+        "background-image": `url(${this.movie.Poster})`
       };
-    },
+    }
   },
   methods: {
     emitRemoveEvent() {

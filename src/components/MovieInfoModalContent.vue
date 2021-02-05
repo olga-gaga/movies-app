@@ -23,7 +23,7 @@
             position="1"
             stars="10"
             show-value-max
-            no-border                        
+            no-border
           />
           <p class="movie-decription">{{ movie.Plot }}</p>
           <div class="mt-3 mb-4">
@@ -36,27 +36,27 @@
             <tbody>
               <tr>
                 <th>Production</th>
-                <td>{{movie.Production}}</td>
+                <td>{{ movie.Production }}</td>
               </tr>
               <tr>
                 <th>Country</th>
-                <td>{{movie.Country}}</td>
+                <td>{{ movie.Country }}</td>
               </tr>
               <tr>
                 <th>Director</th>
-                <td>{{movie.Director}}</td>
+                <td>{{ movie.Director }}</td>
               </tr>
               <tr>
                 <th>Writer</th>
-                <td>{{movie.Writer}}</td>
+                <td>{{ movie.Writer }}</td>
               </tr>
               <tr>
                 <th>Actors</th>
-                <td>{{movie.Actors}}</td>
+                <td>{{ movie.Actors }}</td>
               </tr>
               <tr>
                 <th>Awards</th>
-                <td>{{movie.Awards}}</td>
+                <td>{{ movie.Awards }}</td>
               </tr>
             </tbody>
           </table>
@@ -76,7 +76,8 @@ export default {
     }
   },
   data: () => ({
-    defaultPoster: "linear-gradient(45deg, rgb(0, 3, 38) 0%, rgb(82, 15, 117) 100% )"
+    defaultPoster:
+      "linear-gradient(45deg, rgb(0, 3, 38) 0%, rgb(82, 15, 117) 100% )"
   }),
   computed: {
     posterStyle() {
@@ -85,12 +86,14 @@ export default {
       };
     },
     posterBg() {
-      return this.movie.Poster ? `url(${this.movie.Poster})` : this.defaultPoster;
+      return this.movie.Poster
+        ? `url(${this.movie.Poster})`
+        : this.defaultPoster;
     }
   },
   methods: {
     closeModal() {
-      this.$emit("closeModal")
+      this.$emit("closeModal");
     }
   }
 };
@@ -102,11 +105,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: linear-gradient(
-    45deg,
-    rgb(0, 3, 38) 0%,
-    rgb(82, 15, 117) 100%
-  );
+  background: linear-gradient(45deg, rgb(0, 3, 38) 0%, rgb(82, 15, 117) 100%);
   color: #fff;
 }
 

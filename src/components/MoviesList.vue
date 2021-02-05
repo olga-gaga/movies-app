@@ -23,7 +23,10 @@
         hide-footer
         hide-header
       >
-        <MovieInfoModalContent :movie="selectedMovie" @closeModal="onCloseModal"/>
+        <MovieInfoModalContent
+          :movie="selectedMovie"
+          @closeModal="onCloseModal"
+        />
       </BModal>
     </BContainer>
   </div>
@@ -32,7 +35,7 @@
 <script>
 import MovieItem from "./MovieItem.vue";
 import MovieInfoModalContent from "./MovieInfoModalContent.vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "MoviesList",
@@ -40,18 +43,21 @@ export default {
     list: {
       type: Object,
       default: () => ({})
+    },
+    isSearch: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
     movieInfoModalID: "movie-info",
-    selectedMovieID: "",
+    selectedMovieID: ""
   }),
   components: {
     MovieItem,
     MovieInfoModalContent
   },
   computed: {
-    ...mapGetters("movies", ["isSearch"]),
     listTitle() {
       return this.isSearch ? "Search result" : "IMDB Top 250";
     },
@@ -68,16 +74,19 @@ export default {
     onMouseOver(poster) {
       this.$emit("changePoster", poster);
     },
-    async onRemoveMovie({ id, title = '' }) {
-      const isConfirmed = await this.$bvModal.msgBoxConfirm(`Are you sure delete "${title}"?`);
+    async onRemoveMovie({ id, title = "" }) {
+      const isConfirmed = await this.$bvModal.msgBoxConfirm(
+        `Are you sure delete "${title}"?`
+      );
       if (isConfirmed) {
         this.removeMovie(id);
-        this.showNotify({
-          message: "Movie deleted successful",
-          title: "Success",
-          variant: "success" 
-        }, 
-        { root: true });
+        this.showNotify(
+          {
+            message: "Movie deleted successful",
+            title: "Success"
+          },
+          { root: true }
+        );
       }
     },
     onShowMovieInfo(id) {
@@ -86,7 +95,6 @@ export default {
       this.$bvModal.show(this.movieInfoModalID);
     },
     onCloseModal() {
-      this.selectedMovieID = null;
       this.$bvModal.hide(this.movieInfoModalID);
     }
   }
@@ -106,7 +114,7 @@ export default {
 
 <style>
 .movie-modal-content {
-  border:0 !important;
+  border: 0 !important;
 }
 
 .movie-modal-body {

@@ -4,9 +4,18 @@ import mutations from "@/store/mutations";
 
 const { MOVIES, CURRENT_PAGE, REMOVE_MOVIE, TOGGLE_SEARCH } = mutations;
 
+async function getMovies(idsArray) {
+  const requests = idsArray.map(id => axios.get(`/?i=${id}`));
+  return await Promise.all(requests);
+}
+
 function serializeResponse(movies) {
   return movies.reduce((acc, movie) => {
     acc[movie.imdbID] = movie;
+    if (movie.Poster === "N/A") {
+      movie.Poster =
+        "https://raw.githubusercontent.com/olga-gaga/movies-app/main/src/assets/No_image_poster.png";
+    }
     return acc;
   }, {});
 }
@@ -27,7 +36,11 @@ const moviesStore = {
     moviesPerPage: ({ moviesPerPage }) => moviesPerPage,
     moviesLength: ({ top250IDs }) => Object.keys(top250IDs).length || 0,
     isSearch: ({ isSearch }) => isSearch,
-    noPoster: ({ noPoster }) => noPoster
+    noPoster: ({ noPoster }) => noPoster,
+    range: ({ currentPage, moviesPerPage }) => ({
+      from: currentPage * moviesPerPage - moviesPerPage,
+      to: currentPage * moviesPerPage
+    })
   },
   mutations: {
     [MOVIES](state, value) {
@@ -47,26 +60,35 @@ const moviesStore = {
     async fetchMovies({ getters, commit, dispatch }) {
       try {
         dispatch("toggleLoader", true, { root: true });
-        const { currentPage, moviesPerPage, slicedIDs } = getters;
-        const from = currentPage * moviesPerPage - moviesPerPage;
-        const to = currentPage * moviesPerPage;
+        const {
+          range: { from, to },
+          slicedIDs
+        } = getters;
+
         const moviesToFetch = slicedIDs(from, to);
-        const requests = moviesToFetch.map(id => axios.get(`/?i=${id}`));
-        const response = await Promise.all(requests);
+        const response = await getMovies(moviesToFetch);
         const movies = serializeResponse(response);
+
         commit(MOVIES, movies);
-        //console.log(movies);
       } catch (error) {
         console.log(error);
+        dispatch(
+          "showNotify",
+          {
+            message: error.message,
+            title: "Error"
+          },
+          { root: true }
+        );
       } finally {
         dispatch("toggleLoader", false, { root: true });
       }
     },
-    changeCurrentPage({commit, dispatch}, page) {
+    changeCurrentPage({ commit, dispatch }, page) {
       commit(CURRENT_PAGE, page);
       dispatch("fetchMovies");
     },
-    removeMovie({ commit, dispatch, state: {top250IDs} }, id) {
+    removeMovie({ commit, dispatch, state: { top250IDs } }, id) {
       const index = top250IDs.findIndex(item => item === id);
       if (index !== -1) {
         commit(REMOVE_MOVIE, index);
@@ -74,24 +96,29 @@ const moviesStore = {
       }
     },
     async searchMovies({ commit, dispatch }, query) {
-      try{
+      try {
         dispatch("toggleLoader", true, { root: true });
 
         const response = await axios.get(`/?s=${query}`);
-        if(response.Error) {
+        if (response.Error) {
           throw Error(response.Error);
         }
-        const movies = serializeResponse(response.Search);
-        console.log(movies);
+
+        const searchIDs = response.Search.map(({ imdbID }) => imdbID);
+        const searchResponse = await getMovies(searchIDs);
+        const movies = serializeResponse(searchResponse);
+
         commit(MOVIES, movies);
-      } catch(error) {
+      } catch (error) {
         console.log(error.message);
-        dispatch("showNotify", {
-          message: error.message,
-          title: "Error",
-          variant: "danger" 
-        }, 
-        { root: true });
+        dispatch(
+          "showNotify",
+          {
+            message: error.message,
+            title: "Error"
+          },
+          { root: true }
+        );
       } finally {
         dispatch("toggleLoader", false, { root: true });
       }
