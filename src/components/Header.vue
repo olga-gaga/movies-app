@@ -3,7 +3,7 @@
     <BNavbar class="navbar" type="dark" variant="dark">
       <BContainer>
         <BNavbarBrand href="/">MovieDB</BNavbarBrand>
-        <BNavForm>
+        <BNavForm @submit.stop.prevent="">
           <BFormInput
             v-model="searchValue"
             debounce="500"

@@ -90,7 +90,6 @@ export default {
       }
     },
     onShowMovieInfo(id) {
-      console.log(id);
       this.selectedMovieID = id;
       this.$bvModal.show(this.movieInfoModalID);
     },
