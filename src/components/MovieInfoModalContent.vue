@@ -72,6 +72,7 @@ export default {
   props: {
     movie: {
       type: Object,
+      default: () => ({}),
       required: true
     }
   },

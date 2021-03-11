@@ -5,6 +5,7 @@ import mutations from "@/store/mutations";
 const { MOVIES, CURRENT_PAGE, REMOVE_MOVIE, TOGGLE_SEARCH } = mutations;
 
 async function getMovies(idsArray) {
+  if (!idsArray.length) return;
   const requests = idsArray.map(id => axios.get(`/?i=${id}`));
   return await Promise.all(requests);
 }
@@ -100,7 +101,7 @@ const moviesStore = {
         dispatch("toggleLoader", true, { root: true });
 
         const response = await axios.get(`/?s=${query}`);
-        if (response.Error) {
+        if (response.Error || !response.Search) {
           throw Error(response.Error);
         }
 
